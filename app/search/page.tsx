@@ -1,12 +1,13 @@
 "use client"
-import { QueryClient, QueryClientProvider } from "react-query"
-import SearchPage from "./pages/search"
+
 import { Provider } from "react-redux"
-import store from "./store/store"
+import store from "../store/store"
+import { QueryClient, QueryClientProvider } from "react-query"
+import SearchPage from "../pages/search"
 
 const queryClient = new QueryClient()
 
-function Home() {
+export default function Search() {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
@@ -15,5 +16,3 @@ function Home() {
     </Provider>
   )
 }
-
-export default Home
