@@ -58,7 +58,6 @@ const SearchPage = () => {
       router.push("search")
     }
   }
-  console.log(error as Error)
 
   useEffect(() => {
     if (error instanceof Error) {
