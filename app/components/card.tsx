@@ -1,16 +1,9 @@
 import React from "react"
-import { Joke } from "../interface/interface"
+import S from "./card.module.css"
 
 const JokeCard = ({ jokeValue }: { jokeValue: string }) => {
   return (
-    <div
-      style={{
-        border: "1px solid #ccc",
-        padding: "16px",
-        margin: "8px",
-        borderRadius: "8px",
-      }}
-    >
+    <div className={S.card}>
       <p>{jokeValue}</p>
     </div>
   )

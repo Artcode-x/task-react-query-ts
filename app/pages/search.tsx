@@ -37,7 +37,6 @@ const SearchPage = () => {
     enabled: typeof searchQuery === "string" && searchQuery.length >= 4,
   })
 
-  // Деструктуризация для total и result
   const total = jokes?.total || 0
   const result: Joke[] = jokes?.result || []
 
@@ -53,18 +52,11 @@ const SearchPage = () => {
     const inputQuery = e.target.value
     setSearchQuery(inputQuery)
 
-    // Обновление адресной строки без перезагрузки
-    //  const url = new URL(window.location.origin + "/search")
     if (inputQuery) {
       router.push(`search?query=${inputQuery}`)
     } else {
       router.push("search")
     }
-    //   url.searchParams.set("query", inputQuery)
-    // } else {
-    //   url.searchParams.delete("query") // Удаляем параметр, если пусто
-    // }
-    // window.history.pushState({}, "", url)
   }
   console.log(error as Error)
 
