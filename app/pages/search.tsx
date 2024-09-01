@@ -3,18 +3,22 @@
 import React, { useEffect, useState } from "react"
 import { useQuery } from "react-query"
 import JokeCard from "../components/card"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { fetchJokes } from "../api/api"
 import { useDispatch, useSelector } from "react-redux"
 import { updateTotalCount } from "../store/reducersSlice"
 import { totalCountResults } from "../store/toolkitSelectors"
-
 import S from "./search.module.css"
 import { Joke } from "../interface/interface"
+
 const SearchPage = () => {
   const router = useRouter()
-  const initialQuery = router.query || ""
+  const params = useSearchParams()
+
+  const initialQuery = params.get("query") || ""
   const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
+  const [errMsg, setErrMsg] = useState("")
+
   const dispatch = useDispatch()
   const total_count = useSelector(totalCountResults)
 
@@ -23,10 +27,9 @@ const SearchPage = () => {
       window.history.pushState({}, "", "/search")
     }
     setSearchQuery(initialQuery)
-  }, [initialQuery])
+  }, [])
 
   const {
-    // data: { total = 0, result = [] } = {},
     data: jokes,
     isLoading,
     error,
@@ -36,7 +39,7 @@ const SearchPage = () => {
 
   // Деструктуризация для total и result
   const total = jokes?.total || 0
-  const result = jokes?.result || []
+  const result: Joke[] = jokes?.result || []
 
   useEffect(() => {
     if (total != 0) {
@@ -50,15 +53,24 @@ const SearchPage = () => {
     const inputQuery = e.target.value
     setSearchQuery(inputQuery)
 
-    // Обновляем адресную строку без перезагрузки
-    const url = new URL(window.location.origin + "/search")
-    if (inputQuery) {
-      url.searchParams.set("query", inputQuery)
-    } else {
-      url.searchParams.delete("query") // Удаляем параметр, если пусто
-    }
-    window.history.pushState({}, "", url)
+    // Обновление адресной строки без перезагрузки
+    //  const url = new URL(window.location.origin + "/search")
+    // if (inputQuery) {
+    router.push(`search?query=${inputQuery}`)
+
+    //   url.searchParams.set("query", inputQuery)
+    // } else {
+    //   url.searchParams.delete("query") // Удаляем параметр, если пусто
+    // }
+    // window.history.pushState({}, "", url)
   }
+  console.log(error as Error)
+
+  useEffect(() => {
+    if (error instanceof Error) {
+      setErrMsg(error.message)
+    }
+  }, [error])
 
   return (
     <div className={S.container}>
@@ -72,69 +84,16 @@ const SearchPage = () => {
           className={S.input}
         />
         {`Total count: ${total_count}`}
-        {/* <button
-          type="button"
-          onClick={() => router.push(`/search?query=${searchQuery}`)}
-          className={S.button}
-        >
-          Поиск
-        </button> */}
       </form>
 
       {isLoading && <p>Загрузка...</p>}
-      <>{error && <p className={S.error}>Ошибка при получении шуток: {error.message}</p>}</>
+      <>{errMsg && <p className={S.error}>Ошибка при получении шуток: {errMsg}</p>}</>
+
       <div className={S.jokeGrid}>
-        {result && result.map((joke: Joke) => <JokeCard key={joke.id} joke={joke.value} />)}
+        {result && result.map((joke) => <JokeCard key={joke.id} jokeValue={joke.value} />)}
       </div>
     </div>
   )
 }
 
-// const styles = {
-//   container: {
-//     marginTop: "10%",
-//     padding: "40px",
-//     borderRadius: "8px",
-//     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
-//     margin: "0 auto",
-//   },
-
-//   form: {
-//     display: "flex",
-//     flexDirection: "column",
-//     gap: "10px",
-//   },
-//   input: {
-//     padding: "20px",
-//     width: "-webkit-fill-available",
-//     border: "1px solid #ccc",
-//     borderRadius: "14px",
-//     fontSize: "16px",
-//     marginRight: "10px",
-//     color: "#656ec2",
-//   },
-//   button: {
-//     padding: "10px 15px",
-//     backgroundColor: "#0070f3",
-//     color: "#fff",
-//     border: "none",
-//     borderRadius: "4px",
-//     cursor: "pointer",
-//     fontSize: "16px",
-//     transition: "background-color 0.3s",
-//   },
-//   buttonHover: {
-//     backgroundColor: "#005bb5",
-//   },
-//   error: {
-//     color: "red",
-//     textAlign: "center",
-//   },
-//   jokeGrid: {
-//     marginTop: "2%",
-//     display: "grid",
-//     gridTemplateColumns: "1fr 1fr",
-//     gap: "20px",
-//   },
-// }
 export default SearchPage

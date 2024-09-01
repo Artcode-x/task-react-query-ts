@@ -2,7 +2,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  total_count: {},
+  total_count: 0,
 }
 
 const reducersSlice = createSlice({

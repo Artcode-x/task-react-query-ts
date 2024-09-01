@@ -1,7 +1,7 @@
 import React from "react"
 import { Joke } from "../interface/interface"
 
-const JokeCard: React.FC<Joke> = ({ joke }) => {
+const JokeCard = ({ jokeValue }: { jokeValue: string }) => {
   return (
     <div
       style={{
@@ -11,7 +11,7 @@ const JokeCard: React.FC<Joke> = ({ joke }) => {
         borderRadius: "8px",
       }}
     >
-      <p>{joke}</p>
+      <p>{jokeValue}</p>
     </div>
   )
 }
