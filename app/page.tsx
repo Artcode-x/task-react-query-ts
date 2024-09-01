@@ -1,19 +1,19 @@
 "use client"
-import Image from "next/image"
-import styles from "./page.module.css"
-import Link from "next/link"
 import { QueryClient, QueryClientProvider } from "react-query"
-import { useState } from "react"
+import SearchPage from "./pages/search"
+import { Provider } from "react-redux"
+import store from "./store/store"
 
-export default function Home() {
-  const [queryClient] = useState(() => new QueryClient())
+const queryClient = new QueryClient()
 
+function Home() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <main>
-        <h1>home</h1>
-        <Link href={"/components/search"}>поиск</Link>
-      </main>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <SearchPage />
+      </QueryClientProvider>
+    </Provider>
   )
 }
+
+export default Home
