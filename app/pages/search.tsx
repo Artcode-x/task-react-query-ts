@@ -55,9 +55,11 @@ const SearchPage = () => {
 
     // Обновление адресной строки без перезагрузки
     //  const url = new URL(window.location.origin + "/search")
-    // if (inputQuery) {
-    router.push(`search?query=${inputQuery}`)
-
+    if (inputQuery) {
+      router.push(`search?query=${inputQuery}`)
+    } else {
+      router.push("search")
+    }
     //   url.searchParams.set("query", inputQuery)
     // } else {
     //   url.searchParams.delete("query") // Удаляем параметр, если пусто
